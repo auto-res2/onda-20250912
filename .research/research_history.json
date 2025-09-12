@@ -1,0 +1,10 @@
+{
+  "research_topic": "diffusion models",
+  "queries": [
+    "denoising diffusion probabilistic models",
+    "score-based generative modeling",
+    "latent diffusion models",
+    "conditional diffusion sampling",
+    "SDE diffusion models"
+  ]
+}

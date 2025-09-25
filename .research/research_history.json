@@ -6,5 +6,157 @@
     "latent diffusion models",
     "conditional diffusion models",
     "diffusion model sampling"
+  ],
+  "research_study_list": [
+    {
+      "title": "On Analyzing Generative and Denoising Capabilities of Diffusion-based Deep Generative Models"
+    },
+    {
+      "title": "Denoising Diffusion Samplers"
+    },
+    {
+      "title": "Information-Theoretic Diffusion"
+    },
+    {
+      "title": "Denoising Diffusion Bridge Models"
+    },
+    {
+      "title": "Interpretable Diffusion via Information Decomposition"
+    },
+    {
+      "title": "Listening to the noise: Blind Denoising with Gibbs Diffusion"
+    },
+    {
+      "title": "DDM$^2$: Self-Supervised Diffusion MRI Denoising with Generative Diffusion Models"
+    },
+    {
+      "title": "An Edit Friendly DDPM Noise Space: Inversion and Manipulations"
+    },
+    {
+      "title": "A Variational Perspective on Solving Inverse Problems with Diffusion Models"
+    },
+    {
+      "title": "Denoising Diffusion Implicit Models"
+    },
+    {
+      "title": "Improved Techniques for Training Score-Based Generative Models"
+    },
+    {
+      "title": "Score-Based Generative Modeling through Stochastic Differential Equations"
+    },
+    {
+      "title": "Convergence for score-based generative modeling with polynomial complexity"
+    },
+    {
+      "title": "Score-Based Generative Modeling through Stochastic Differential Equations"
+    },
+    {
+      "title": "Score-based Generative Modeling Secretly Minimizes the Wasserstein Distance"
+    },
+    {
+      "title": "A Variational Perspective on Diffusion-Based Generative Models and Score Matching"
+    },
+    {
+      "title": "A Variational Perspective on Diffusion-Based Generative Models and Score Matching"
+    },
+    {
+      "title": "Improved Analysis of Score-based Generative Modeling: User-Friendly Bounds under Minimal Smoothness Assumptions"
+    },
+    {
+      "title": "Maximum Likelihood Training for Score-based Diffusion ODEs by High Order Denoising Score Matching"
+    },
+    {
+      "title": "Maximum Likelihood Training for Score-based Diffusion ODEs by High Order Denoising Score Matching"
+    },
+    {
+      "title": "Latent Diffusion for Language Generation"
+    },
+    {
+      "title": "Solving Linear Inverse Problems Provably via Posterior Sampling with Latent Diffusion Models"
+    },
+    {
+      "title": "Denoising Diffusion Probabilistic Models"
+    },
+    {
+      "title": "InfoDiffusion: Representation Learning Using Information Maximizing Diffusion Models"
+    },
+    {
+      "title": "Single Mesh Diffusion Models with Field Latents for Texture Generation"
+    },
+    {
+      "title": "Solving Inverse Problems with Latent Diffusion Models via Hard Data Consistency"
+    },
+    {
+      "title": "Binary Latent Diffusion"
+    },
+    {
+      "title": "Align Your Latents: High-Resolution Video Synthesis With Latent Diffusion Models"
+    },
+    {
+      "title": "DisCo-Diff: Enhancing Continuous Diffusion Models with Discrete Latents"
+    },
+    {
+      "title": "On Statistical Rates and  Provably Efficient Criteria of Latent Diffusion Transformers (DiTs)"
+    },
+    {
+      "title": "User-defined Event Sampling and Uncertainty Quantification in Diffusion Models for Physical Dynamical Systems"
+    },
+    {
+      "title": "Discrete Contrastive Diffusion for Cross-Modal Music and Image Generation"
+    },
+    {
+      "title": "Constrained Diffusion Models via Dual Training"
+    },
+    {
+      "title": "DEFT: Efficient Fine-tuning of Diffusion Models by Learning the Generalised $h$-transform"
+    },
+    {
+      "title": "CARD: Classification and Regression Diffusion Models"
+    },
+    {
+      "title": "Don’t Drop Your Samples! Coherence-Aware Training Benefits Conditional Diffusion"
+    },
+    {
+      "title": "Practical and Asymptotically Exact Conditional Sampling in Diffusion Models"
+    },
+    {
+      "title": "DiffuSeq: Sequence to Sequence Text Generation with Diffusion Models"
+    },
+    {
+      "title": "A Unified Conditional Framework for Diffusion-based Image Restoration"
+    },
+    {
+      "title": "Conditional score-based diffusion models for Bayesian inference in infinite dimensions"
+    },
+    {
+      "title": "Denoising Diffusion Samplers"
+    },
+    {
+      "title": "Solving Diffusion ODEs with Optimal Boundary Conditions for Better Image Super-Resolution"
+    },
+    {
+      "title": "Diffusion Posterior Sampling for Linear Inverse Problem Solving: A Filtering Perspective"
+    },
+    {
+      "title": "On the Trajectory Regularity of ODE-based Diffusion Sampling"
+    },
+    {
+      "title": "Fast Sampling of Diffusion Models with Exponential Integrator"
+    },
+    {
+      "title": "DPM-Solver: A Fast ODE Solver for Diffusion Probabilistic Model Sampling in Around 10 Steps"
+    },
+    {
+      "title": "DPM-Solver: A Fast ODE Solver for Diffusion Probabilistic Model Sampling in Around 10 Steps"
+    },
+    {
+      "title": "Diffusion Models Beat GANs on Image Synthesis"
+    },
+    {
+      "title": "Diffusion Models Beat GANs on Image Synthesis"
+    },
+    {
+      "title": "Diffusing Differentiable Representations"
+    }
   ]
 }

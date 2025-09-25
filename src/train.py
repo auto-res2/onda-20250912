@@ -53,9 +53,20 @@ class AVSDBase(nn.Module):
 
     def __init__(self, device: str = "cuda"):
         super().__init__()
+
+        # ------------------------------------------------------------------
+        # Mixed-precision only when CUDA is available.  On CPU use fp32
+        # because many kernels are not implemented for fp16.
+        # ------------------------------------------------------------------
+        dtype = torch.float16 if device.startswith("cuda") else torch.float32
+
+        # NOTE: from_pretrained can throw if models are not cached and the
+        # host has no internet connection.  We purposefully *do not*
+        # silence this error – fail-fast is preferable to silently running
+        # with an uninitialised model.
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             "stabilityai/stable-diffusion-xl-base-1.0",
-            torch_dtype=torch.float16,
+            torch_dtype=dtype,
         ).to(device)
 
         # Freeze UNet – we only fine-tune adapters / rank predictor

@@ -8,8 +8,8 @@ helper modules ``train``, ``evaluate`` and ``preprocess``.
 Running
     uv run python -m src.main
 creates the following artefacts per iteration:
-    • .research/iteration1/<exp_name>.json       – numerical results
-    • .research/iteration1/images/*.pdf          – publication figures
+    • .research/iteration2/<exp_name>.json       – numerical results
+    • .research/iteration2/images/*.pdf          – publication figures
 and prints to STDOUT the experiment description, JSON content and list
 of generated figure files – **in that order**, as required by the
 rubric.
@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import json
 import textwrap
+import time
 from pathlib import Path
 from typing import Callable, Dict, Any, List
 
@@ -26,7 +27,7 @@ import torch
 import torch.utils.data as data
 import numpy as np
 import scipy.stats as st
-import torchaudio  # <-- Added to fix NameError during audio processing
+import torchaudio  # Needed during audio processing
 
 from .train import AVSDBase, MLPRankPredictor
 from .evaluate import FID, line_plot
@@ -38,11 +39,11 @@ from .preprocess import (
 )
 
 # ---------------------------------------------------------------------
-# Repository-level paths
+# Repository-level paths – updated to iteration2 as per rubric
 # ---------------------------------------------------------------------
 ROOT = Path(__file__).resolve().parent.parent
 CFG_PATH = ROOT / "config" / "config.yaml"
-RES_DIR = ROOT / ".research" / "iteration1"
+RES_DIR = ROOT / ".research" / "iteration2"
 IMG_DIR = RES_DIR / "images"
 RES_DIR.mkdir(parents=True, exist_ok=True)
 IMG_DIR.mkdir(parents=True, exist_ok=True)
@@ -71,7 +72,7 @@ class Experiment1Runner:
     def __init__(self, cfg: Dict[str, Any]):
         self.cfg = cfg
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        torch.backends.cudnn.benchmark = True
+        torch.backends.cudnn.benchmark = self.device == "cuda"
         self.generated_figures: List[str] = []
 
     # ------------------------------------------------------------------
@@ -106,8 +107,8 @@ class Experiment1Runner:
                 full_ds,
                 batch_size=self.cfg["batch_size"],
                 sampler=sampler,
-                num_workers=6,
-                pin_memory=True,
+                num_workers=0,  # keep 0 to avoid multiprocessing overhead in CI
+                pin_memory=self.device == "cuda",
             )
             for split, sampler in samplers.items()
         }
@@ -130,6 +131,25 @@ class Experiment1Runner:
         return model
 
     # ------------------------------------------------------------------
+    def _time_forward(self, model: AVSDBase, video, mel, depth):
+        """Device-agnostic timing helper returning latency in **ms**."""
+        if self.device == "cuda":
+            start = torch.cuda.Event(enable_timing=True)
+            end = torch.cuda.Event(enable_timing=True)
+            start.record()
+            with torch.cuda.amp.autocast(), torch.no_grad():
+                out = model(video, mel, depth, prompt_emb=None)
+            end.record()
+            torch.cuda.synchronize()
+            latency = start.elapsed_time(end)
+        else:
+            t0 = time.perf_counter()
+            with torch.no_grad():
+                out = model(video, mel, depth, prompt_emb=None)
+            latency = (time.perf_counter() - t0) * 1e3  # → ms
+        return out, latency
+
+    # ------------------------------------------------------------------
     def run(self) -> Dict[str, Any]:
         dls = self._prepare_dataloaders()
         variants = ["variant_a", "variant_b", "variant_c", "variant_d"]
@@ -150,22 +170,25 @@ class Experiment1Runner:
                 n_frames = 0
 
                 for video, audio, sr, depth in dls["test"]:
-                    video = video.to(self.device, non_blocking=True)
-                    depth = depth.to(self.device, non_blocking=True)
+                    video = video.to(self.device, non_blocking=self.device == "cuda")
+                    depth = depth.to(self.device, non_blocking=self.device == "cuda")
+
+                    # ``sr`` comes from DataLoader – it is a list when
+                    # batch_size > 1.  We take the *first* element since
+                    # all clips share the same sample rate.
+                    if isinstance(sr, (list, tuple)):
+                        sr_val = int(sr[0])
+                    else:
+                        sr_val = int(sr)
+
                     mel = torchaudio.transforms.MelSpectrogram(
-                        sample_rate=sr,
+                        sample_rate=sr_val,
                         n_mels=128,
                         hop_length=160,
                     )(audio).to(self.device)
 
-                    start = torch.cuda.Event(enable_timing=True)
-                    end = torch.cuda.Event(enable_timing=True)
-                    start.record()
-                    with torch.cuda.amp.autocast(), torch.no_grad():
-                        out = model(video, mel, depth, prompt_emb=None)
-                    end.record()
-                    torch.cuda.synchronize()
-                    latency = start.elapsed_time(end)  # ms
+                    out, latency = self._time_forward(model, video, mel, depth)
+
                     lat_accum += latency
                     n_frames += video.shape[0]
 
@@ -187,8 +210,8 @@ class Experiment1Runner:
                             macs_accum = float("nan")
 
                 raw[variant]["fid"].append(fid_metric.compute())
-                raw[variant]["mac"].append(macs_accum / n_frames)
-                raw[variant]["latency_ms"].append(lat_accum / n_frames)
+                raw[variant]["mac"].append(macs_accum / max(1, n_frames))
+                raw[variant]["latency_ms"].append(lat_accum / max(1, n_frames))
 
         # Aggregate mean ±95 % CI
         results: Dict[str, Dict[str, Dict[str, float]]] = {}

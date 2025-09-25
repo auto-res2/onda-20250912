@@ -1,0 +1,29 @@
+# config/config.yaml
+# Unified configuration file – aggregates the three YAMLs from the
+# original monolithic script so that src.main can iterate over the list
+# `experiments`.
+
+experiments:
+  - name: experiment1
+    description: |
+      Experiment 1 – Cross-Modal Tucker Sparsity Stress-Test
+      Variant (a) Vanilla 12-step SD-XL, (b) HASTE-Diff, (c) SAFE-HASTE
+      fixed ranks ¼, (d) SAFE-HASTE learned ranks.  We measure MACs, FID
+      and latency on 500 Kinetics-700 clips (+Librispeech audio, NYU-Depth
+      synthetic planes).  5 random seeds.
+    seeds: [13, 17, 19, 23, 29]
+    batch_size: 4
+
+  - name: experiment2
+    description: |
+      Experiment 2 – PAC-Bayes Certified Scheduler vs Black-Box policies.
+      We benchmark three schedulers over downstream tasks (TAO-AV, BDD-
+      100K, MSR-VTT) under energy budgets 0.5–4 GFLOPs / frame.
+    energy_budgets_gflop: [0.5, 1, 2, 4]
+
+  - name: experiment3
+    description: |
+      Experiment 3 – End-to-End Privacy, Safety & Federated Adaptation.
+      1 000 virtual clients across three device profiles execute three FL
+      rounds.  We log privacy leakage, CLIP-SIM-AV and convergence gap.
+    federated_rounds: 3

@@ -1,0 +1,4 @@
+=== uv sync start Thu Sep 25 03:39:28 AM UTC 2025 ===
+=== uv install end Thu Sep 25 03:40:43 AM UTC 2025 ===
+=== experiment start Thu Sep 25 03:40:43 AM UTC 2025 ===
+Downloading https://s3.amazonaws.com/kinetics/700_2020/train/k700_train_320p.zip → /home/toma/pt80-1-a-27/_work/onda-20250912/onda-20250912/data/k700_train_320p.zip
